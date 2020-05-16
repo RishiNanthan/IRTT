@@ -16,9 +16,10 @@ class _HomeScreenState extends State<HomeScreen> {
   var selectedbtn;
   @override
   Widget build(BuildContext context) {
+
     const dropdownstyle = TextStyle(
       color: Colors.blueAccent,
-      fontSize: 20,
+      fontSize: 15,
       fontWeight: FontWeight.bold,
     );
 
@@ -36,7 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
     else{
       return Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+          backgroundColor: Colors.blue[800],
+          title: Text("IRTT"),
           actions: <Widget>[
             Container(
               padding: EdgeInsets.symmetric(vertical:5),
@@ -46,7 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   hint: null,
                   icon: Icon(Icons.more_vert, color: Colors.white,),
                   items: <DropdownMenuItem>[
-                    DropdownMenuItem(child: SizedBox(height: 2,), value: null,),
                     DropdownMenuItem(child:Text('Login', style: dropdownstyle,), value: 'Login',),
                     DropdownMenuItem(child: Text('Staff', style: dropdownstyle,), value: 'Staff',),
                     DropdownMenuItem(child: Text('Administrator', style: dropdownstyle,), value: 'Administrator',),
@@ -87,13 +88,13 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Image.asset('assets/irttlogo.jpg'),
             ),
             SizedBox(height: 20,),
-            Text("Institute of Road and Transport Technology", 
-              style: TextStyle(color: Colors.blue[800], fontSize: 25, fontWeight: FontWeight.bold),
+            Text("Institute of Road and Transport Technology - Erode", 
+              style: TextStyle(color: Colors.blue[800], fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20,),
+            SizedBox(height: 40,),
             FlatButton(
               onPressed: (){},
-              color: Colors.blue[800],
+              color: Colors.blueAccent[200],
               child: ListTile(
                 contentPadding: EdgeInsets.all(16),
                 title: Text("Computer Science and Engineering", style: whitetext),
@@ -119,12 +120,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
             FlatButton(
               onPressed: (){},
-              color: Colors.blue[800],
+              color: Colors.blueAccent[200],
               child: ListTile(
                 contentPadding: EdgeInsets.all(16),
                 title: Text("Electrical and Electronics Engineering", style: whitetext,),
                 leading: Image.asset('assets/irttlogo.jpg', height: 50,),
-                //trailing: Text("Department", style: whitetext,),
               ),
             ),
 
@@ -145,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             FlatButton(
               onPressed: (){},
-              color: Colors.blue[800],
+              color: Colors.blueAccent[200],
               child: ListTile(
                 contentPadding: EdgeInsets.all(16),
                 title: Text("Mechanical Engineering", style: whitetext,),
@@ -163,7 +163,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 contentPadding: EdgeInsets.all(16),
                 title: Text("Automobile Engineering", style: whitetext,),
                 leading: Image.asset('assets/irttlogo.jpg', height: 50,),
-                //trailing: Text("Department", style: whitetext,),
               ),
             ),
 
@@ -171,23 +170,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
             FlatButton(
               onPressed: (){},
-              color: Colors.blue[800],
+              color: Colors.blueAccent[200],
               child: ListTile(
                 contentPadding: EdgeInsets.all(16),
                 title: Text("Civil Engineering", style: whitetext,),
                 leading: Image.asset('assets/irttlogo.jpg', height: 50,),
-                //trailing: Text("Department", style: whitetext,),
               ),
             ),
 
-            SizedBox(height: 25,),
+            SizedBox(height: 55,),
 
           ],
         ),
 
 
         bottomNavigationBar: Container(
-          decoration: BoxDecoration(color: Colors.blueAccent),
+          decoration: BoxDecoration(color: Colors.blue[800]),
           height: 50,
           child: Container(
             padding: EdgeInsets.symmetric(horizontal:20),

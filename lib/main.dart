@@ -8,12 +8,9 @@ class Irtt extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'IRTT',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomeScreen(title: "IRTT"),
+      title: "IRTT",
       debugShowCheckedModeBanner: false,
+      home: HomeScreen(title: "IRTT",),
     );
   }
 }
