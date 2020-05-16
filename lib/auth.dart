@@ -17,7 +17,7 @@ class Authorisation{
 
   Future<dynamic> getStudent(String rollno) async {
     try{
-      DocumentSnapshot student = await _db.collection('Students').document('17cse35').get();
+      DocumentSnapshot student = await _db.collection('Students').document(rollno).get();
       return student;
     }
     catch(e){

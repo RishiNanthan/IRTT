@@ -15,6 +15,8 @@ class StudentDashboard extends StatefulWidget {
 }
 
 class _StudentDashboardState extends State<StudentDashboard> {
+
+  String btn = "home";
   
   void showFee(){
     showModalBottomSheet(context: context, builder: (context){
@@ -44,13 +46,17 @@ class _StudentDashboardState extends State<StudentDashboard> {
   @override
   Widget build(BuildContext context) {
     const TextStyle val = TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold, fontSize: 15);
-
+    if(btn == "notification"){
+      return Notification(student: widget.student,);
+    }
+    else if(btn == "event"){
+      return Events(student: widget.student,);
+    }
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blue[800],
           title: Text("DashBoard - IRTT"),
-          actions: <Widget>[
-            
+          actions: <Widget>[           
           ],
         ),
         
@@ -223,19 +229,29 @@ class _StudentDashboardState extends State<StudentDashboard> {
                     IconButton(
                       icon:Icon(Icons.home),
                       color: Colors.white,
-                      onPressed: (){},
+                      onPressed: (){
+                        
+                      },
                     ),
 
                     IconButton(
                       icon:Icon(Icons.notifications),
                       color: Colors.white,
-                      onPressed: (){},
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (_){
+                          return Notification(student:widget.student);
+                        }));
+                      },
                     ),
 
                     IconButton(
                       icon:Icon(Icons.event_note),
                       color: Colors.white,
-                      onPressed: (){},
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (_){
+                          return Events(student:widget.student);
+                        }));
+                      },
                     ),
 
                     IconButton(
@@ -253,11 +269,13 @@ class _StudentDashboardState extends State<StudentDashboard> {
 }
 
 
+
 class Notification extends StatelessWidget{
+  final Student student;
+
+  Notification({this.student});
 
   final _db = Firestore.instance.collection('Notification');
-  final Student student;
-  Notification({this.student});
 
   Stream<QuerySnapshot> notification({Student user}){
     var notifications = _db
@@ -273,7 +291,7 @@ class Notification extends StatelessWidget{
     return Scaffold(
       appBar: AppBar(title: Text('Notification'), backgroundColor: Colors.blueAccent,),
       body: StreamBuilder(
-        stream: notification(user:student),
+        stream: notification(user: student),
         builder: (_, snapshot){
           if(snapshot.hasData){
             int count = snapshot.data.documents.length;
@@ -284,11 +302,12 @@ class Notification extends StatelessWidget{
                 if(count > 0){
                   return Container(
                     padding: EdgeInsets.symmetric(vertical:10, horizontal:0),
-                    child: Container(
-                      decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent[100])),
-                      child: ListTile(
-                        title: Text("${document['staff'].toString().toUpperCase()} : ${document['message']}",
-                          style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold, fontSize: 15),
+                    child: Card(
+                      color: Colors.blueAccent,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal:20, vertical:10),
+                        child: Text("${document['staff'].toString().toUpperCase()} : ${document['message']}",
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
                         ),
                       ),
                     ),
@@ -444,7 +463,7 @@ class TimeTable extends StatelessWidget{
               },
             ),
           ),
-
+          SizedBox(height: 50,),
         ],
       ),
     );   
@@ -482,17 +501,20 @@ class Assignment extends StatelessWidget{
               itemBuilder: (_, int index){
                 var document = snapshot.data.documents[index];
                 return Container(
-                  padding: EdgeInsets.symmetric(vertical:10, horizontal:0),
-                  child: Container(
-                    decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent[100])),
-                    child: Column(
-                      children: <Widget>[
-                        Text("${document['staff'].toString().toUpperCase()} : ${document['about']} (${document['subject']})",
-                        style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold, fontSize: 20),),
-                        SizedBox(height: 5,),
-                        Text('Due Date : ${document['due_date']}', style: TextStyle(color: Colors.red),),
-                      ],
-                      ),
+                  padding: EdgeInsets.symmetric(vertical:10, horizontal:20),
+                  child: Card(
+                    color: Colors.blueAccent,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal:20, vertical:10),
+                      child: Column(
+                        children: <Widget>[
+                          Text("${document['staff'].toString().toUpperCase()} : ${document['about']} (${document['subject']})",
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),),
+                          SizedBox(height: 5,),
+                          Text('Due Date : ${document['due_date']}', style: TextStyle(backgroundColor: Colors.white,color: Colors.red, fontWeight: FontWeight.bold),),
+                        ],
+                        ),
+                    ),
                     ),
                 );
               });
@@ -591,15 +613,15 @@ class _ChatState extends State<Chat>{
   String userMsg = '';
   final input = TextEditingController();
 
-
   Future<void> sendMessage(String message) async {
-    _db.document(widget.student.uid.toString()).setData(
+    _db.document(widget.student.rollno).setData(
       {
         'name': widget.student.name,
         'year': widget.student.year(),
         'department': widget.student.department(),
         'rollno': widget.student.rollno,
-        'message': message
+        'message': message,
+        'time': DateTime.now(),
       }
     );
   }
@@ -625,7 +647,7 @@ class _ChatState extends State<Chat>{
               color: color,
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical:10, horizontal: 20),
-                child:Text("${message['rollno']==widget.student.rollno? 'You': message['name']}: ${message['message']}",
+                child:Text("${message['rollno'] == widget.student.rollno? 'You': message['name']}: ${message['message']}",
                             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18),
                  ),
               )
@@ -652,7 +674,6 @@ class _ChatState extends State<Chat>{
             width: 250,
             child: TextField(
               maxLength: 200,
-              maxLines: 5,
               controller: input,
               onChanged: (val){
                 userMsg = val;
@@ -692,7 +713,7 @@ class _ChatState extends State<Chat>{
   @override
   Widget build(BuildContext context) {
     var snapshots = _db.where('year', isEqualTo: widget.student.year())
-    .where('department', isEqualTo: widget.student.department()).snapshots();
+    .where('department', isEqualTo: widget.student.department()).orderBy('time').snapshots();
 
     return StreamBuilder(
       stream: snapshots,
@@ -742,12 +763,13 @@ class Events extends StatelessWidget{
               itemBuilder: (_, int index){
                 var document = snapshot.data.documents[index];
                 return Container(
-                  padding: EdgeInsets.symmetric(vertical:10, horizontal:0),
-                  child: Container(
-                    decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent[100])),
-                    child: ListTile(
-                      title: Text("${document['name'].toString().toUpperCase()} : ${document['about']}",
-                        style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold, fontSize: 15),
+                  padding: EdgeInsets.symmetric(vertical:10, horizontal:20),
+                  child: Card(
+                    color: Colors.blueAccent,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal:20, vertical:10),  
+                      child: Text("${document['name'].toString().toUpperCase()} : ${document['about']}",
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
                       ),
                     ),
                   ),
